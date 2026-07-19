@@ -1,0 +1,11 @@
+# CODEOWNERS — every file and directory requires @Ariel-Patino as a reviewer.
+# This ensures that no pull request can be merged into main without approval
+# from the repository owner.
+#
+# To fully enforce that ONLY @Ariel-Patino can push directly to main:
+#   1. Go to Settings > Branches > Add branch protection rule for "main".
+#   2. Enable "Require a pull request before merging".
+#   3. Enable "Require review from Code Owners".
+#   4. Enable "Restrict who can push to matching branches" and add only @Ariel-Patino.
+
+* @Ariel-Patino

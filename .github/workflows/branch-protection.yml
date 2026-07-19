@@ -1,0 +1,24 @@
+name: Enforce Branch Owner
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-pusher:
+    name: Verify only the repository owner can push to main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check pusher identity
+        run: |
+          ALLOWED_USER="Ariel-Patino"
+          ACTUAL_USER="${{ github.actor }}"
+
+          if [ "$ACTUAL_USER" != "$ALLOWED_USER" ] && [ "$ACTUAL_USER" != "github-actions[bot]" ]; then
+            echo "::error::Direct pushes to 'main' are restricted to @${ALLOWED_USER}."
+            echo "::error::Detected actor: '${ACTUAL_USER}'"
+            exit 1
+          fi
+
+          echo "Push by '${ACTUAL_USER}' — allowed."
