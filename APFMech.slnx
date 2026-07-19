@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/APFMech.Application/APFMech.Application.csproj" />
+    <Project Path="src/APFMech.Domain/APFMech.Domain.csproj" />
+    <Project Path="src/APFMech.Infrastructure/APFMech.Infrastructure.csproj" />
+    <Project Path="src/APFMech.WebAPI/APFMech.WebAPI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/APFMech.UnitTests/APFMech.UnitTests.csproj" />
+  </Folder>
+</Solution>
