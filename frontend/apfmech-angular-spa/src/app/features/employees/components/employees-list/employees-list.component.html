@@ -1,0 +1,95 @@
+<main class="page-shell mx-auto grid max-w-6xl gap-4 p-4">
+  <header class="grid gap-2">
+    <p class="kicker">People directory</p>
+    <h1 class="page-title text-3xl sm:text-4xl">Mechanics and employees</h1>
+  </header>
+
+  @if (loading()) {
+    <section class="panel-card flex items-center gap-3" aria-live="polite" data-testid="loading-state">
+      <span class="size-4 animate-spin rounded-full border-2 border-apf-teal/20 border-t-apf-teal" aria-hidden="true"></span>
+      <p class="m-0">Loading employees...</p>
+    </section>
+  } @else if (!hasEmployees()) {
+    <section class="panel-card grid gap-1.5" data-testid="empty-state">
+      <h2 class="page-title text-xl">No employees found</h2>
+      <p class="m-0 text-apf-muted-light">No mechanics or employees are registered yet.</p>
+    </section>
+  } @else {
+    <section class="panel-card overflow-auto p-0">
+      <table class="min-w-[760px] w-full border-collapse" aria-label="Employees list">
+        <thead>
+          <tr>
+            <th class="border-b border-apf-dark/10 px-3 py-3 text-left text-xs font-normal uppercase tracking-[0.12em] text-apf-label">
+              Full Name
+            </th>
+            <th class="border-b border-apf-dark/10 px-3 py-3 text-left text-xs font-normal uppercase tracking-[0.12em] text-apf-label">
+              Email User Id
+            </th>
+            <th class="border-b border-apf-dark/10 px-3 py-3 text-left text-xs font-normal uppercase tracking-[0.12em] text-apf-label">
+              Employee Id
+            </th>
+            <th class="border-b border-apf-dark/10 px-3 py-3 text-left text-xs font-normal uppercase tracking-[0.12em] text-apf-label">
+              Status
+            </th>
+            <th class="border-b border-apf-dark/10 px-3 py-3 text-left text-xs font-normal uppercase tracking-[0.12em] text-apf-label">
+              Roles
+            </th>
+            <th class="border-b border-apf-dark/10 px-3 py-3 text-left text-xs font-normal uppercase tracking-[0.12em] text-apf-label">
+              Disable
+            </th>
+            <th class="border-b border-apf-dark/10 px-3 py-3 text-left text-xs font-normal uppercase tracking-[0.12em] text-apf-label">
+              Delete
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (employee of employees(); track employee.id) {
+            <tr data-testid="employee-row">
+              <td class="border-b border-apf-dark/10 px-3 py-3 align-top text-sm text-apf-dark">
+                {{ employeeFullName(employee) }}
+              </td>
+              <td class="border-b border-apf-dark/10 px-3 py-3 align-top text-sm text-apf-dark">{{ employee.userId }}</td>
+              <td class="border-b border-apf-dark/10 px-3 py-3 align-top text-sm text-apf-dark">{{ employee.id }}</td>
+              <td class="border-b border-apf-dark/10 px-3 py-3 align-top text-sm text-apf-dark">
+                <span
+                  class="status-pill"
+                  [class.status-pill-active]="employeeStatus(employee) === 'Active'"
+                  [class.status-pill-inactive]="employeeStatus(employee) === 'Inactive'"
+                  [class.status-pill-neutral]="employeeStatus(employee) !== 'Active' && employeeStatus(employee) !== 'Inactive'"
+                  [attr.data-status]="employeeStatus(employee)"
+                >
+                  {{ employeeStatus(employee) }}
+                </span>
+              </td>
+              <td class="border-b border-apf-dark/10 px-3 py-3 align-top text-sm text-apf-dark">
+                {{ employee.roles.join(', ') }}
+              </td>
+              <td class="border-b border-apf-dark/10 px-3 py-3 align-top text-sm text-apf-dark">
+                <button
+                  type="button"
+                  data-testid="disable-button"
+                  class="btn-secondary"
+                  [disabled]="!employee.isActive || isOperationInProgress(employee.id)"
+                  (click)="disableEmployee(employee.id)"
+                >
+                  Disable
+                </button>
+              </td>
+              <td class="border-b border-apf-dark/10 px-3 py-3 align-top text-sm text-apf-dark">
+                <button
+                  type="button"
+                  data-testid="delete-button"
+                  class="btn-primary"
+                  [disabled]="isOperationInProgress(employee.id)"
+                  (click)="deleteEmployee(employee.id)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+</main>

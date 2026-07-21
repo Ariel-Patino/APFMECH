@@ -1,0 +1,29 @@
+<section
+  class="rounded-2xl border border-apf-dark/10 bg-linear-to-br from-white/95 to-slate-50/95 p-5 shadow-xl shadow-apf-dark/10"
+  aria-labelledby="create-work-order-title"
+>
+  <div class="mb-4 grid gap-1">
+    <p class="kicker tracking-[0.17em]">Quick action</p>
+    <h2 id="create-work-order-title" class="page-title text-2xl">Create work order</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid gap-3.5" novalidate>
+    <label class="field-label" for="work-order-description">
+      <span>Description</span>
+      <textarea
+        id="work-order-description"
+        rows="3"
+        formControlName="description"
+        placeholder="Describe the maintenance task"
+        class="min-h-24 resize-y rounded-xl border border-apf-muted/25 bg-white/90 px-3.5 py-3 text-inherit focus:border-apf-teal focus:outline-none focus:ring-4 focus:ring-apf-teal/15"
+      ></textarea>
+      @if (showDescriptionRequired()) {
+        <small class="field-error">Description is required.</small>
+      }
+    </label>
+
+    <button data-testid="create-submit" class="btn-primary w-fit px-4 py-3" type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'Creating...' : 'Create work order' }}
+    </button>
+  </form>
+</section>

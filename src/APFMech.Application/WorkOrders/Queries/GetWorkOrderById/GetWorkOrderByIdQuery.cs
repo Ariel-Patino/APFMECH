@@ -1,4 +1,5 @@
 using APFMech.Application.Common.Interfaces;
+using APFMech.Application.WorkOrders;
 using APFMech.Application.WorkOrders.Commands.CreateWorkOrder;
 using MediatR;
 
@@ -18,14 +19,7 @@ var workOrder = await dbContext.WorkOrders.GetByIdAsync(request.Id, cancellation
         return null;
     }
 
-    return new WorkOrderDto(
-        workOrder.Id,
-        workOrder.TrackingNumber,
-        workOrder.Description,
-        workOrder.Status.ToString(),
-        workOrder.AssignedMechanicId,
-        workOrder.CreatedAtUtc
-    );
+    return await workOrder.ToDtoAsync(dbContext.Employees, cancellationToken);
 }
 
 

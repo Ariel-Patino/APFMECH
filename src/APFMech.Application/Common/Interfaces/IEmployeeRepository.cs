@@ -9,4 +9,5 @@ public interface IEmployeeRepository
     Task<IReadOnlyList<Employee>> GetAllAsync(CancellationToken cancellationToken = default);
     Task AddAsync(Employee employee, CancellationToken cancellationToken = default);
     void Update(Employee employee);
+    void Remove(Employee employee);
 }

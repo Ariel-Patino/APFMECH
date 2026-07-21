@@ -1,4 +1,5 @@
 using APFMech.Application.Common.Interfaces;
+using APFMech.Application.WorkOrders;
 using APFMech.Application.WorkOrders.Commands.CreateWorkOrder;
 using MediatR;
 
@@ -20,13 +21,6 @@ public class CompleteWorkOrderCommandHandler(IApplicationDbContext dbContext)
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new WorkOrderDto(
-            workOrder.Id,
-            workOrder.TrackingNumber,
-            workOrder.Description,
-            workOrder.Status.ToString(),
-            workOrder.AssignedMechanicId,
-            workOrder.CreatedAtUtc
-        );
+        return await workOrder.ToDtoAsync(dbContext.Employees, cancellationToken);
     }
 }

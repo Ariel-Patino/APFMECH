@@ -13,13 +13,7 @@ public class GetAllEmployeesQueryHandler(IApplicationDbContext dbContext)
         var employees = await dbContext.Employees.GetAllAsync(cancellationToken);
 
         return employees
-            .Select(employee => new EmployeeDto(
-                employee.Id,
-                employee.UserId,
-                employee.FirstName,
-                employee.LastName,
-                employee.IsActive,
-                employee.Roles.Select(role => role.Name).ToList()))
+            .Select(employee => employee.ToDto())
             .ToList();
     }
 }

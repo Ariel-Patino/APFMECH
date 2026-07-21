@@ -6,4 +6,5 @@ public record WorkOrderResponse(
     string Description,
     string Status,
     Guid? AssignedMechanicId,
+    string? AssignedMechanicFullName,
     DateTime CreatedAtUtc);

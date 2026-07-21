@@ -1,4 +1,5 @@
 using APFMech.Application.Common.Interfaces;
+using APFMech.Application.WorkOrders;
 using APFMech.Domain.Entities;
 using MediatR;
 
@@ -17,13 +18,6 @@ public class CreateWorkOrderCommandHandler(IApplicationDbContext dbContext)
         await dbContext.SaveChangesAsync(cancellationToken);
 
         // 3. Explicit manual mapping to DTO (No AutoMapper)
-        return new WorkOrderDto(
-            workOrder.Id,
-            workOrder.TrackingNumber,
-            workOrder.Description,
-            workOrder.Status.ToString(),
-            workOrder.AssignedMechanicId,
-            workOrder.CreatedAtUtc
-        );
+        return await workOrder.ToDtoAsync(dbContext.Employees, cancellationToken);
     }
 }

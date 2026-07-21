@@ -17,12 +17,6 @@ public class GetEmployeeByUserIdQueryHandler(IApplicationDbContext dbContext)
             return null;
         }
 
-        return new EmployeeDto(
-            employee.Id,
-            employee.UserId,
-            employee.FirstName,
-            employee.LastName,
-            employee.IsActive,
-            employee.Roles.Select(role => role.Name).ToList());
+        return employee.ToDto();
     }
 }

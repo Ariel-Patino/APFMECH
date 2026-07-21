@@ -1,0 +1,120 @@
+@use 'tailwindcss';
+
+@theme {
+  --color-apf-dark: #1d2a34;
+  --color-apf-teal: #2d7d88;
+  --color-apf-teal-light: #1f6f76;
+  --color-apf-rust: #b25a2c;
+  --color-apf-rust-muted: #8d5b33;
+  --color-apf-muted: #455463;
+  --color-apf-muted-light: #4d5d6e;
+  --color-apf-label: #5f6d7c;
+  --color-apf-error: #a12f27;
+  --color-apf-success: #1f5a24;
+  --color-apf-success-bg: #1f5a24;
+  --color-apf-danger-bg: #7a251f;
+  --color-apf-info-bg: #18457d;
+  --font-serif: Georgia, 'Times New Roman', serif;
+}
+
+@layer base {
+  body {
+    @apply m-0 bg-white text-apf-dark antialiased;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply block min-h-[calc(100dvh-4.5rem)];
+  }
+
+  .kicker {
+    @apply m-0 text-xs font-bold uppercase tracking-[0.16em] text-apf-teal;
+  }
+
+  .page-title {
+    @apply m-0 font-serif leading-tight text-apf-dark;
+  }
+
+  .panel-card {
+    @apply rounded-2xl border border-apf-dark/10 bg-white/95 p-5 shadow-xl shadow-apf-dark/10;
+  }
+
+  .field-label {
+    @apply grid gap-2 font-semibold text-apf-dark;
+  }
+
+  .field-input {
+    @apply w-full rounded-2xl border border-apf-muted/25 bg-white/90 px-4 py-3.5 text-inherit transition focus:border-apf-teal focus:outline-none focus:ring-4 focus:ring-apf-teal/15;
+  }
+
+  .field-error {
+    @apply text-sm text-apf-error;
+  }
+
+  .btn-primary {
+    @apply cursor-pointer rounded-full border-0 bg-linear-to-br from-apf-dark to-apf-teal px-5 py-3.5 font-bold text-white transition enabled:hover:-translate-y-px enabled:hover:shadow-lg enabled:hover:shadow-apf-dark/20 disabled:cursor-not-allowed disabled:opacity-70;
+  }
+
+  .btn-secondary {
+    @apply cursor-pointer rounded-xl border-0 bg-apf-muted/15 px-3 py-2.5 font-bold text-apf-dark disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .status-pill {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold;
+  }
+
+  .status-pill-active {
+    @apply bg-green-700/15 text-apf-success;
+  }
+
+  .status-pill-inactive {
+    @apply bg-red-800/15 text-apf-danger-bg;
+  }
+
+  .status-pill-neutral {
+    @apply bg-apf-label/15 text-apf-muted;
+  }
+
+  .auth-card {
+    @apply w-full max-w-[31rem] rounded-[1.75rem] border border-apf-dark/10 bg-white/90 p-6 shadow-2xl shadow-apf-dark/10 backdrop-blur-xl sm:p-10;
+  }
+
+  .auth-register-card {
+    @apply w-full max-w-[35rem] rounded-[1.75rem] border border-apf-dark/10 bg-white/90 p-6 shadow-2xl shadow-apf-dark/10 backdrop-blur-xl sm:p-10;
+  }
+}
+
+@layer utilities {
+  .bg-auth-login {
+    background:
+      radial-gradient(circle at top left, rgba(207, 77, 38, 0.22), transparent 35%),
+      radial-gradient(circle at bottom right, rgba(27, 58, 97, 0.18), transparent 32%),
+      linear-gradient(135deg, #f4eee6 0%, #fffdf9 55%, #e6edf3 100%);
+  }
+
+  .bg-auth-register {
+    background:
+      radial-gradient(circle at top right, rgba(18, 111, 139, 0.18), transparent 28%),
+      radial-gradient(circle at bottom left, rgba(206, 110, 56, 0.18), transparent 32%),
+      linear-gradient(140deg, #f7f3ec 0%, #fbfcfd 50%, #ebf2f6 100%);
+  }
+
+  .bg-work-orders {
+    background:
+      radial-gradient(circle at top left, rgba(40, 114, 134, 0.16), transparent 34%),
+      radial-gradient(circle at bottom right, rgba(215, 113, 46, 0.14), transparent 30%),
+      linear-gradient(135deg, #f4f8fa 0%, #fefefe 45%, #eef4f8 100%);
+  }
+
+  .bg-not-found {
+    background:
+      radial-gradient(circle at 20% 15%, rgba(47, 100, 142, 0.14), transparent 35%),
+      radial-gradient(circle at 85% 80%, rgba(194, 108, 56, 0.16), transparent 33%),
+      linear-gradient(160deg, #f5f8fb 0%, #ffffff 45%, #ecf2f7 100%);
+  }
+
+  .bg-auth-callback {
+    background: linear-gradient(140deg, #f3f7fb 0%, #ffffff 50%, #ecf3f8 100%);
+  }
+}

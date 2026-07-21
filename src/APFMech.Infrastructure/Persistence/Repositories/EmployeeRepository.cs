@@ -36,4 +36,9 @@ public class EmployeeRepository(ApplicationDbContext dbContext) : IEmployeeRepos
     {
         dbContext.Employees.Update(employee);
     }
+
+    public void Remove(Employee employee)
+    {
+        dbContext.Employees.Remove(employee);
+    }
 }

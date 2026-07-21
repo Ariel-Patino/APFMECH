@@ -1,0 +1,13 @@
+<main class="page-shell grid place-items-center bg-auth-callback p-5">
+  <section class="panel-card grid w-full max-w-lg gap-3 text-center">
+    @if (loading()) {
+      <span class="mx-auto size-4 animate-spin rounded-full border-2 border-apf-teal/20 border-t-apf-teal" aria-hidden="true"></span>
+      <h1 class="page-title text-2xl">Completing sign in...</h1>
+      <p class="m-0 text-apf-muted-light">We are validating your session and preparing the dashboard.</p>
+    } @else if (error()) {
+      <h1 class="page-title text-2xl">Sign in failed</h1>
+      <p class="m-0 text-apf-muted-light">{{ error() }}</p>
+      <button class="btn-primary mx-auto mt-1 w-fit px-4 py-2.5" type="button" (click)="goToLogin()">Back to login</button>
+    }
+  </section>
+</main>

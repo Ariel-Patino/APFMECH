@@ -46,7 +46,8 @@ public static class DependencyInjection
 
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
-
+        services.AddScoped<DatabaseInitializerForDevelopment>();
+        
         services.AddOpenIddict()
             .AddCore(options => options.UseEntityFrameworkCore().UseDbContext<ApplicationDbContext>())
             .AddServer(options =>

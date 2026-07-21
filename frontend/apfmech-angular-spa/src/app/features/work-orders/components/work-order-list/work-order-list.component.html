@@ -1,0 +1,133 @@
+<main class="mx-auto grid max-w-6xl gap-5 bg-work-orders p-4 sm:p-8">
+  <section class="grid gap-2">
+    <p class="kicker">Operations board</p>
+    <h1 class="page-title text-3xl sm:text-5xl">Work order control center</h1>
+    <p class="m-0 leading-relaxed text-apf-muted">
+      Create, assign and complete maintenance orders in one workflow panel.
+    </p>
+  </section>
+
+  <app-work-order-create (created)="onWorkOrderCreated($event)"></app-work-order-create>
+
+  <div class="flex border-b border-apf-dark/10 gap-2 overflow-x-auto">
+    <button
+      type="button"
+      (click)="setTab('Pending')"
+      class="px-4 py-2 text-sm font-semibold border-b-2 transition-colors duration-150"
+      [class.border-apf-teal]="activeTab() === 'Pending'"
+      [class.text-apf-teal]="activeTab() === 'Pending'"
+      [class.border-transparent]="activeTab() !== 'Pending'"
+      [class.text-apf-muted]="activeTab() !== 'Pending'"
+    >
+      Pending
+    </button>
+
+    <button
+      type="button"
+      (click)="setTab('InProgress')"
+      class="px-4 py-2 text-sm font-semibold border-b-2 transition-colors duration-150"
+      [class.border-apf-teal]="activeTab() === 'InProgress'"
+      [class.text-apf-teal]="activeTab() === 'InProgress'"
+      [class.border-transparent]="activeTab() !== 'InProgress'"
+      [class.text-apf-muted]="activeTab() !== 'InProgress'"
+    >
+      In Progress
+    </button>
+
+    <button
+      type="button"
+      (click)="setTab('Completed')"
+      class="px-4 py-2 text-sm font-semibold border-b-2 transition-colors duration-150"
+      [class.border-apf-teal]="activeTab() === 'Completed'"
+      [class.text-apf-teal]="activeTab() === 'Completed'"
+      [class.border-transparent]="activeTab() !== 'Completed'"
+      [class.text-apf-muted]="activeTab() !== 'Completed'"
+    >
+      Completed
+    </button>
+
+    <button
+      type="button"
+      (click)="setTab('All')"
+      class="px-4 py-2 text-sm font-semibold border-b-2 transition-colors duration-150"
+      [class.border-apf-teal]="activeTab() === 'All'"
+      [class.text-apf-teal]="activeTab() === 'All'"
+      [class.border-transparent]="activeTab() !== 'All'"
+      [class.text-apf-muted]="activeTab() !== 'All'"
+    >
+      All
+    </button>
+  </div>
+
+  <section class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4" aria-label="Work orders list">
+    @for (workOrder of filteredWorkOrders(); track workOrder.id) {
+      <article class="panel-card flex flex-col gap-3.5 h-full">
+        <header class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <p class="m-0 text-xs uppercase tracking-[0.13em] text-apf-label">{{ workOrder.trackingNumber }}</p>
+            <h2 class="mt-1.5 text-lg leading-snug text-apf-dark line-clamp-4" [title]="workOrder.description">{{ workOrder.description }}</h2>
+            <a 
+              [routerLink]="['/work-orders', workOrder.id]" 
+              class="text-xs font-bold text-apf-teal hover:underline hover:text-apf-teal-light"
+            >
+            See details
+          </a>
+          </div>
+          <span
+class="status-pill shrink-0"
+            [class.status-pill-active]="workOrder.status === 'Completed'"
+            [class.status-pill-neutral]="workOrder.status !== 'Completed'"
+            [attr.data-status]="workOrder.status"
+          >
+            {{ workOrder.status }}
+          </span>
+        </header>
+
+        <p class="m-0 text-sm text-apf-label mt-auto pt-2">Created: {{ workOrder.createdAtUtc | date: 'medium' }}</p>
+        <p class="m-0 text-sm text-apf-label">Assigned mechanic: {{ assignedMechanicLabel(workOrder) }}</p>
+
+        <div class="grid gap-1.5">
+          <label class="field-label text-sm" [attr.for]="'mechanic-' + workOrder.id">Assign mechanic</label>
+          <select
+            data-testid="mechanic-select"
+            [id]="'mechanic-' + workOrder.id"
+            [value]="selectedMechanics()[workOrder.id]"
+            (change)="onMechanicSelectionChange(workOrder.id, $any($event.target).value)"
+            class="field-input text-sm"
+          >
+            <option value="">Select a mechanic</option>
+            @for (employee of employees(); track employee.id) {
+              <option [value]="employee.id">{{ employeeFullName(employee) }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 items-center">
+          <button
+            data-testid="assign-button"
+            type="button"
+            class="btn-secondary"
+            [disabled]="!selectedMechanics()[workOrder.id]"
+            (click)="assignMechanic(workOrder.id)"
+          >
+            {{ assignmentActionLabel(workOrder) }}
+          </button>
+
+          <button
+            data-testid="complete-button"
+            type="button"
+            class="btn-primary"
+            [disabled]="isWorkOrderCompleted(workOrder)"
+            (click)="completeWorkOrder(workOrder.id)"
+          >
+            Complete
+          </button>
+        </div>
+      </article>
+    } @empty {
+      <div class="col-span-full py-12 text-center text-apf-muted">
+        <p class="m-0 text-sm">No work orders found for this status.</p>
+      </div>
+    }
+  </section>
+</main>

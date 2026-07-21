@@ -1,0 +1,35 @@
+<main class="mx-auto max-w-4xl p-4 sm:p-8 bg-work-orders min-h-screen">
+      <div class="mb-6">
+        <a routerLink="/work-orders" class="text-sm font-semibold text-apf-teal hover:underline">
+          &larr; Back to Work Orders
+        </a>
+      </div>
+
+      @if (loading()) {
+        <p class="text-apf-muted">Loading work order details...</p>
+      } @else if (workOrder(); as wo) {
+        <article class="panel-card flex flex-col gap-5">
+          <header class="flex items-start justify-between gap-4 border-b border-apf-dark/10 pb-4">
+            <div>
+              <p class="m-0 text-xs uppercase tracking-[0.13em] text-apf-label">{{ wo.trackingNumber }}</p>
+              <h1 class="page-title text-2xl sm:text-4xl mt-1">{{ wo.description }}</h1>
+            </div>
+            <span
+              class="status-pill shrink-0"
+              [class.status-pill-active]="wo.status === 'Completed'"
+              [class.status-pill-neutral]="wo.status !== 'Completed'"
+            >
+              {{ wo.status }}
+            </span>
+          </header>
+
+          <section class="grid gap-3 text-sm text-apf-dark">
+            <p><strong class="text-apf-label">ID:</strong> {{ wo.id }}</p>
+            <p><strong class="text-apf-label">Created At:</strong> {{ wo.createdAtUtc | date: 'medium' }}</p>
+            <p><strong class="text-apf-label">Assigned Mechanic:</strong> {{ wo.assignedMechanicFullName || 'None' }}</p>
+          </section>
+        </article>
+    } @else {
+        <p class="text-apf-error">Work order not found.</p>
+    }
+</main>

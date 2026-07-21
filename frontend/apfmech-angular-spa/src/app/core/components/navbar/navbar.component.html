@@ -1,0 +1,46 @@
+<header
+  class="sticky top-0 z-10 grid grid-cols-[auto_1fr_auto_auto] items-center gap-4 border-b border-white/10 bg-[rgba(15,27,37,0.92)] px-4 py-3 backdrop-blur-md max-lg:grid-cols-1 max-lg:items-start"
+>
+  <div>
+    <a
+      routerLink="/work-orders"
+      class="font-serif text-2xl font-bold tracking-wide text-white no-underline"
+      aria-label="APFMech home"
+    >
+      APFMech
+    </a>
+  </div>
+
+  @if (isAuthenticated()) {
+    <nav class="flex flex-wrap gap-3" aria-label="Main navigation">
+      <a
+        routerLink="/work-orders"
+        class="rounded-full border border-slate-300/25 px-3 py-1.5 text-sm text-slate-300 no-underline hover:border-white/50 hover:text-white"
+        data-testid="work-orders-link"
+      >
+        Work Orders
+      </a>
+      <a
+        routerLink="/employees"
+        class="rounded-full border border-slate-300/25 px-3 py-1.5 text-sm text-slate-300 no-underline hover:border-white/50 hover:text-white"
+        data-testid="employees-link"
+      >
+        Mechanics / Employees
+      </a>
+    </nav>
+
+    <div class="text-right max-lg:text-left" data-testid="user-info">
+      <p class="m-0 text-sm font-bold text-slate-300">{{ currentUser()?.fullName }}</p>
+      <p class="m-0 text-xs text-slate-300/90">{{ currentUser()?.email }}</p>
+    </div>
+
+    <button
+      data-testid="logout-button"
+      type="button"
+      class="cursor-pointer rounded-full border-0 bg-linear-to-br from-[#a9402d] to-[#c96c2f] px-3.5 py-2 font-bold text-white"
+      (click)="logout()"
+    >
+      Sign out
+    </button>
+  }
+</header>

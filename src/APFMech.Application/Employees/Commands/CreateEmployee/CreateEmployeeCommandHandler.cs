@@ -14,12 +14,6 @@ public class CreateEmployeeCommandHandler(IApplicationDbContext dbContext)
         await dbContext.Employees.AddAsync(employee, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new EmployeeDto(
-            employee.Id,
-            employee.UserId,
-            employee.FirstName,
-            employee.LastName,
-            employee.IsActive,
-            employee.Roles.Select(role => role.Name).ToList());
+        return employee.ToDto();
     }
 }

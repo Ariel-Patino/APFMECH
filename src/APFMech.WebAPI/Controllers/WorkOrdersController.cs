@@ -89,5 +89,6 @@ public class WorkOrdersController(ISender sender) : ControllerBase
         dto.Description,
         dto.Status,
         dto.AssignedMechanicId,
+        dto.AssignedMechanicFullName,
         dto.CreatedAtUtc);
 }

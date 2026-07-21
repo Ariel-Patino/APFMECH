@@ -8,6 +8,7 @@ public record WorkOrderDto(
     string Description,
     string Status,
     Guid? AssignedMechanicId,
+    string? AssignedMechanicFullName,
     DateTime CreatedAtUtc
 );
 

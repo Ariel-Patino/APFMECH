@@ -1,0 +1,77 @@
+<main class="grid min-h-dvh grid-cols-[1.05fr_0.95fr] bg-auth-register max-[960px]:grid-cols-1">
+  <section class="flex flex-col justify-center gap-6 p-5 sm:p-8 lg:p-20 max-[960px]:pb-4">
+    <p class="m-0 text-xs font-bold uppercase tracking-[0.18em] text-apf-teal-light">APFMech Access</p>
+    <h1 class="page-title max-w-[11ch] text-5xl sm:text-6xl lg:text-7xl">
+      Create an account for the workshop network.
+    </h1>
+    <p class="m-0 max-w-2xl leading-relaxed text-apf-muted">
+      Register mechanics and staff with a clean profile setup that is ready for secured work order operations.
+    </p>
+  </section>
+
+  <section class="flex items-center justify-center p-6" aria-labelledby="register-title">
+    <div class="auth-register-card">
+      <div class="mb-7 grid gap-2.5">
+        <p class="m-0 text-xs font-bold uppercase tracking-[0.18em] text-apf-teal-light">New user onboarding</p>
+        <h2 id="register-title" class="page-title text-4xl sm:text-5xl">Register</h2>
+        <p class="m-0 max-w-2xl leading-relaxed text-apf-muted">
+          Create your APFMech account to start working with the platform.
+        </p>
+      </div>
+
+      <form class="grid gap-4" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <label class="field-label">
+            <span>First name</span>
+            <input class="field-input" type="text" formControlName="firstName" autocomplete="given-name" placeholder="Alex" />
+            @if (showError('firstName', 'required')) {
+              <small class="field-error">First name is required.</small>
+            }
+          </label>
+
+          <label class="field-label">
+            <span>Last name</span>
+            <input class="field-input" type="text" formControlName="lastName" autocomplete="family-name" placeholder="Rivera" />
+            @if (showError('lastName', 'required')) {
+              <small class="field-error">Last name is required.</small>
+            }
+          </label>
+        </div>
+
+        <label class="field-label">
+          <span>Email</span>
+          <input class="field-input" type="email" formControlName="email" autocomplete="email" placeholder="name@apfmech.local" />
+          @if (showError('email', 'required')) {
+            <small class="field-error">Email is required.</small>
+          }
+          @if (showError('email', 'email')) {
+            <small class="field-error">Enter a valid email address.</small>
+          }
+        </label>
+
+        <label class="field-label">
+          <span>Password</span>
+          <input
+            class="field-input"
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            placeholder="Create a secure password"
+          />
+          @if (showError('password', 'required')) {
+            <small class="field-error">Password is required.</small>
+          }
+        </label>
+
+        <button class="btn-primary mt-2 bg-linear-to-br from-apf-dark to-apf-teal-light" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Creating account...' : 'Create account' }}
+        </button>
+      </form>
+
+      <p class="mt-5 m-0 leading-relaxed text-apf-muted">
+        Already have an account?
+        <a routerLink="/login" class="font-bold text-apf-dark">Go to login</a>
+      </p>
+    </div>
+  </section>
+</main>

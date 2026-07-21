@@ -78,6 +78,8 @@ public class AuthController(
     }
 
     [HttpPost("~/connect/token")]
+    [IgnoreAntiforgeryToken]
+    [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Exchange(CancellationToken cancellationToken)
@@ -94,29 +96,37 @@ public class AuthController(
             string.Equals(grantType, GrantTypes.RefreshToken, StringComparison.Ordinal))
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-            if (authenticateResult.Principal is null)
+            var principal = authenticateResult.Principal;
+            var subject = principal?.GetClaim(Claims.Subject);
+
+            if (principal is null || string.IsNullOrWhiteSpace(subject) || !Guid.TryParse(subject, out var userId))
             {
-                return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                return ForbidInvalidGrant("The authorization code or refresh token is no longer valid.");
             }
 
-            var user = await userManager.GetUserAsync(authenticateResult.Principal);
+            var user = await userManager.FindByIdAsync(userId.ToString());
             if (user is null)
             {
-                return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                return ForbidInvalidGrant("The user is no longer allowed to sign in.");
             }
 
-            var principal = await CreatePrincipalAsync(user, authenticateResult.Principal.GetScopes());
-            return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+            if (!await signInManager.CanSignInAsync(user))
+            {
+                return ForbidInvalidGrant("The user is no longer allowed to sign in.");
+            }
+
+            var tokenPrincipal = await CreatePrincipalAsync(user, principal.GetScopes());
+            return SignIn(tokenPrincipal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        return BadRequest(new { error = "unsupported_grant_type" });
+        throw new InvalidOperationException($"The grant type '{grantType}' is not supported.");
     }
 
     [HttpGet("~/connect/userinfo")]
     [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
     public async Task<IActionResult> UserInfo()
     {
-        var user = await userManager.GetUserAsync(User);
+        var user = await GetCurrentUserAsync(User);
         if (user is null)
         {
             return Unauthorized();
@@ -226,5 +236,27 @@ public class AuthController(
         principal.SetResources("apfmech_resource_server");
 
         return principal;
+    }
+
+    private async Task<User?> GetCurrentUserAsync(ClaimsPrincipal principal)
+    {
+        var userIdValue = principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? principal.FindFirstValue(Claims.Subject);
+        if (!Guid.TryParse(userIdValue, out var userId))
+        {
+            return null;
+        }
+
+        return await userManager.FindByIdAsync(userId.ToString());
+    }
+
+    private ForbidResult ForbidInvalidGrant(string description)
+    {
+        var properties = new AuthenticationProperties(new Dictionary<string, string?>
+        {
+            [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = description
+        });
+
+        return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 }

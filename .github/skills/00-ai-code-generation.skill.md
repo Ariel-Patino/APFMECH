@@ -88,7 +88,7 @@ APFMech is an enterprise technical interview project with the following defined 
 - **Framework**: Angular (latest stable version, currently v18+) with TypeScript.
 - **State management**: Services with RxJS, and optionally NgRx for complex state.
 - **UI library**: Angular Material or a custom component library, but not mandated.
-- **Testing**: Jasmine/Karma for unit tests, Cypress or Playwright for e2e.
+- **Testing**: Jest for unit tests, Cypress or Playwright for e2e.
 
 ### Pluggable Architectural Model
 The system is designed as an **MVP** (Minimum Viable Product) with a **pluggable module** approach for future expansions:

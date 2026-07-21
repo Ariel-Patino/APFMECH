@@ -24,4 +24,16 @@ public class IdentityService(UserManager<User> userManager) : IIdentityService
         var user = await userManager.FindByIdAsync(userId.ToString());
         return user?.UserName;
     }
+
+    public async Task<bool> DeleteUserAsync(Guid userId)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+        {
+            return true;
+        }
+
+        var deleteResult = await userManager.DeleteAsync(user);
+        return deleteResult.Succeeded;
+    }
 }

@@ -16,7 +16,8 @@ public class DatabaseInitializer(
     IOpenIddictApplicationManager applicationManager,
     IOpenIddictScopeManager scopeManager,
     IOptions<OpenIddictSeedOptions> seedOptions,
-    IHostEnvironment environment) : IDatabaseInitializer
+    IHostEnvironment environment,
+    DatabaseInitializerForDevelopment devInitializer) : IDatabaseInitializer
 {
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
@@ -28,6 +29,7 @@ public class DatabaseInitializer(
         if (environment.IsDevelopment())
         {
             await SeedDevelopmentAdminAsync(cancellationToken);
+            await devInitializer.SeedAsync(cancellationToken);
         }
     }
 

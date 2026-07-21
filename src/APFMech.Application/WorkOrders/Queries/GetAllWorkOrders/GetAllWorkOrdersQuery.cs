@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using APFMech.Application.Common.Interfaces;
+using APFMech.Application.WorkOrders;
 using APFMech.Application.WorkOrders.Commands.CreateWorkOrder;
 using MediatR;
 
@@ -14,15 +15,9 @@ public async Task<IReadOnlyList<WorkOrderDto>> Handle(GetAllWorkOrdersQuery requ
 {
 var workOrders = await dbContext.WorkOrders.GetAllAsync(cancellationToken);
 
-    return workOrders
-        .Select(workOrder => new WorkOrderDto(
-            workOrder.Id,
-            workOrder.TrackingNumber,
-            workOrder.Description,
-            workOrder.Status.ToString(),
-            workOrder.AssignedMechanicId,
-            workOrder.CreatedAtUtc
-        ))
-        .ToList();
+    var mappedWorkOrders = await Task.WhenAll(
+        workOrders.Select(workOrder => workOrder.ToDtoAsync(dbContext.Employees, cancellationToken)));
+
+    return mappedWorkOrders;
 }
 }
